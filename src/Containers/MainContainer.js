@@ -1,5 +1,8 @@
 import React, { Component } from 'react';
 import styled from 'styled-components';
+import { connect } from 'react-redux';
+
+import * as actionTypes from '../Actions';
 
 import Counter from 'Components/MainContainer/Counter';
 import Controls from 'Components/MainContainer/Controls';
@@ -26,18 +29,38 @@ class MainContainer extends Component {
     }
 
     render() {
-
         const {
-            className
+            className,
+            counter,
+            onAdd,
+            onRemove
         } = this.props;
 
         return (
             <StyledMainContainer className={className}>
-                <StyledCounter />
-                <StyledControls />
+                <StyledCounter
+                    counter={ counter }
+                />
+                <StyledControls
+                    onAdd={ onAdd }
+                    onRemove={ onRemove }
+                />
             </StyledMainContainer>
         )
     }
 }
 
-export default MainContainer;
+const mapStateToProps = (state) => {
+    return {
+        counter: state.counter.counter
+    }
+};
+
+const mapDispatchToProps = (dispatch) => {
+    return {
+        onAdd: () => dispatch({type: actionTypes.ADD}),
+        onRemove: () => dispatch({type: actionTypes.REMOVE})
+    }
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(MainContainer);
